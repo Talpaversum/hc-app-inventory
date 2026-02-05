@@ -34,6 +34,16 @@ npm run dev
 
 **Note:** `npm run db:migrate` expects `.env` to be present (DATABASE_URL is loaded via `dotenv`).
 
+### Database model (tenant DB + app schema)
+
+Inventory uses the **tenant database** and isolates data in a fixed schema `app_inventory`.
+
+Example `.env`:
+
+```env
+DATABASE_URL=postgres://hc_user:hc_password@localhost:5432/hc_core
+```
+
 ## Build UI plugin module
 
 ```bash

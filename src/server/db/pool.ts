@@ -7,7 +7,9 @@ let pool: Pool | null = null;
 export function getPool() {
   if (!pool) {
     const config = loadConfig();
-    pool = new Pool({ connectionString: config.DATABASE_URL });
+    pool = new Pool({
+      connectionString: config.DATABASE_URL,
+    });
   }
   return pool;
 }
