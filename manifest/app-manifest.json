@@ -1,0 +1,121 @@
+{
+  "app_id": "app_inventory",
+  "app_name": "Inventory",
+  "version": "0.1.0",
+  "vendor": {
+    "name": "Talpaversum",
+    "website": "https://github.com/Talpaversum"
+  },
+  "tenancy": {
+    "scope": "tenant",
+    "cross_tenant_collaboration": {
+      "supported": false,
+      "shareables": []
+    }
+  },
+  "data": {
+    "schemas": ["app_inventory"],
+    "no_cross_app_access": true
+  },
+  "privileges": {
+    "required": ["inventory.read"],
+    "optional": [
+      "inventory.write",
+      "inventory.admin",
+      "inventory.approve_order",
+      "inventory.create_item",
+      "inventory.update_item",
+      "inventory.delete_item"
+    ]
+  },
+  "impersonation": {
+    "supported": true,
+    "allowed_roles": ["core.admin.tenant", "core.admin.department", "core.admin.group"],
+    "allow_cross_tenant": false
+  },
+  "delegation": {
+    "supported": true,
+    "actions": [
+      "inventory.approve_order",
+      "inventory.create_item",
+      "inventory.update_item",
+      "inventory.delete_item"
+    ]
+  },
+  "licensing": {
+    "enforced_by_app": true,
+    "offline_supported": true,
+    "modes": ["perpetual", "time_limited", "scale_limited"],
+    "expiry_behavior": {
+      "non_destructive": true,
+      "read_only": true,
+      "api_read_only": true
+    },
+    "features": {
+      "batch_import": false,
+      "multi_location": false,
+      "barcode_scanning": false,
+      "custom_fields": false,
+      "attachments": false,
+      "audit_export": false
+    },
+    "limits": {
+      "items_max": { "type": "count", "unit": "items" },
+      "locations_max": { "type": "count", "unit": "locations" },
+      "custom_fields_max": { "type": "count", "unit": "fields" },
+      "attachments_gb_max": { "type": "size", "unit": "gb" }
+    }
+  },
+  "integration": {
+    "api": {
+      "exposes": {
+        "base_path": "/apps/app_inventory",
+        "version": "v1"
+      },
+      "consumes_core_api": true
+    },
+    "events": {
+      "emits": [
+        "inventory.item.created",
+        "inventory.item.updated",
+        "inventory.item.deleted",
+        "inventory.stock.adjusted"
+      ],
+      "consumes": [
+        "core.license.changed",
+        "core.user.updated",
+        "core.tenant.policy.changed"
+      ],
+      "idempotent_consumers": true
+    },
+    "ui": {
+      "nav_entries": [
+        {
+          "label": "Přehled",
+          "path": "/app/app_inventory",
+          "required_privileges": ["inventory.read"]
+        },
+        {
+          "label": "Položky",
+          "path": "/app/app_inventory/items",
+          "required_privileges": ["inventory.read"]
+        },
+        {
+          "label": "Lokace",
+          "path": "/app/app_inventory/locations",
+          "required_privileges": ["inventory.read"]
+        },
+        {
+          "label": "Šablony",
+          "path": "/app/app_inventory/templates",
+          "required_privileges": ["inventory.read"]
+        },
+        {
+          "label": "Typy atributů",
+          "path": "/app/app_inventory/attributes",
+          "required_privileges": ["inventory.read"]
+        }
+      ]
+    }
+  }
+}

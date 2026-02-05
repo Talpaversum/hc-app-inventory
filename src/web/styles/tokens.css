@@ -1,0 +1,72 @@
+:root {
+  color-scheme: light dark;
+}
+
+.inventory-app {
+  color: var(--hc-text, #1f2937);
+}
+
+.inventory-app a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.inventory-app .muted {
+  color: var(--hc-muted, #6b7280);
+}
+
+.inventory-app .surface {
+  background: var(--hc-surface, #ffffff);
+  border: 1px solid var(--hc-surface-variant, #e5e7eb);
+  border-radius: 10px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+}
+
+.inventory-app .btn {
+  background: var(--hc-primary, #6366f1);
+  color: var(--hc-on-primary, #ffffff);
+  border: none;
+  border-radius: 8px;
+  padding: 8px 14px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.inventory-app .btn-secondary {
+  background: transparent;
+  color: var(--hc-text, #1f2937);
+  border: 1px solid var(--hc-surface-variant, #e5e7eb);
+}
+
+.inventory-app input,
+.inventory-app select {
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--hc-surface-variant, #e5e7eb);
+  background: var(--hc-surface, #ffffff);
+  color: var(--hc-text, #1f2937);
+}
+
+.inventory-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.inventory-grid.two {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.inventory-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.inventory-table th,
+.inventory-table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid var(--hc-surface-variant, #e5e7eb);
+}
