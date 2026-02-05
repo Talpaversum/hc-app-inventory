@@ -32,6 +32,8 @@ npm install
 npm run dev
 ```
 
+**Note:** `npm run db:migrate` expects `.env` to be present (DATABASE_URL is loaded via `dotenv`).
+
 ## Build UI plugin module
 
 ```bash

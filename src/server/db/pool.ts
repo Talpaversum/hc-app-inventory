@@ -1,10 +1,13 @@
 import { Pool } from "pg";
 
+import { loadConfig } from "../config.js";
+
 let pool: Pool | null = null;
 
 export function getPool() {
   if (!pool) {
-    pool = new Pool({ connectionString: process.env.DATABASE_URL });
+    const config = loadConfig();
+    pool = new Pool({ connectionString: config.DATABASE_URL });
   }
   return pool;
 }
