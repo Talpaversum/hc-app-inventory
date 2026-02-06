@@ -90,6 +90,10 @@
       "idempotent_consumers": true
     },
     "ui": {
+      "artifact": {
+        "url": "/internal/ui/plugin.js",
+        "auth": "core-signed-token"
+      },
       "nav_entries": [
         {
           "label": "Přehled",
