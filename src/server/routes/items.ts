@@ -8,7 +8,7 @@ export async function registerItemRoutes(app: FastifyInstance) {
     const { tenantId } = requireAppContext(request);
     const pool = getPool();
     const result = await pool.query(
-      "select id, name, inventory_number from inventory.items where tenant_id = $1 order by created_at desc",
+      "select id, name, inventory_number from items where tenant_id = $1 order by created_at desc",
       [tenantId],
     );
     return reply.send({ items: result.rows });
@@ -27,7 +27,7 @@ export async function registerItemRoutes(app: FastifyInstance) {
     };
     const pool = getPool();
     const result = await pool.query(
-      "insert into inventory.items (tenant_id, name, inventory_number, template_id, location_id, owner_type, owner_id, manager_type, manager_id, registered_at) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, now()) returning id",
+      "insert into items (tenant_id, name, inventory_number, template_id, location_id, owner_type, owner_id, manager_type, manager_id, registered_at) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, now()) returning id",
       [
         tenantId,
         body.name,
@@ -44,7 +44,7 @@ export async function registerItemRoutes(app: FastifyInstance) {
 
     for (const attr of body.attributes ?? []) {
       await pool.query(
-        "insert into inventory.item_attributes (item_id, attribute_type_id, value_string, value_number, value_date) values ($1, $2, $3, $4, $5)",
+        "insert into item_attributes (item_id, attribute_type_id, value_string, value_number, value_date) values ($1, $2, $3, $4, $5)",
         [itemId, attr.attribute_type_id, attr.value_string ?? null, attr.value_number ?? null, attr.value_date ?? null],
       );
     }
