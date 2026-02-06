@@ -7,7 +7,7 @@ export default defineConfig({
     outDir: "dist-plugin",
     emptyOutDir: true,
     lib: {
-      entry: "src/plugin.ts",
+      entry: "src/plugin.tsx",
       formats: ["es"],
       fileName: () => "plugin.js",
     },
