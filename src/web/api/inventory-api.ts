@@ -1,6 +1,6 @@
 import type { AppContext } from "../../plugin";
 
-const API_BASE = "/api/v1/apps/app_inventory";
+const API_BASE = "/api/v1/apps/inventory";
 
 export type InventoryApi = {
   fetchLocations: () => Promise<{ items: Array<{ id: string; parent_id: string | null; name: string; kind_key: string; kind_label: string }> }>;

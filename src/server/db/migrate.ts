@@ -2,11 +2,13 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 
 import { getPool } from "./pool.js";
+import { deriveAppSchemaName } from "./schema.js";
 
 async function run() {
   const pool = getPool();
-  await pool.query("create schema if not exists app_inventory");
-  await pool.query("set search_path to app_inventory");
+  const schemaName = deriveAppSchemaName("com.talpaversum.inventory");
+  await pool.query(`create schema if not exists ${schemaName}`);
+  await pool.query(`set search_path to ${schemaName}`);
   const migrationsDir = path.resolve(process.cwd(), "migrations");
   const indexFile = await readFile(path.join(migrationsDir, "index.txt"), "utf-8");
   const migrations = indexFile.split("\n").map((line) => line.trim()).filter(Boolean);

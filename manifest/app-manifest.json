@@ -1,5 +1,5 @@
 {
-  "app_id": "app_inventory",
+  "app_id": "com.talpaversum.inventory",
   "app_name": "Inventory",
   "version": "0.1.0",
   "vendor": {
@@ -14,7 +14,7 @@
     }
   },
   "data": {
-    "schemas": ["app_inventory"],
+    "schemas": ["inventory"],
     "no_cross_app_access": true
   },
   "privileges": {
@@ -67,9 +67,10 @@
     }
   },
   "integration": {
+    "slug": "inventory",
     "api": {
       "exposes": {
-        "base_path": "/apps/app_inventory",
+        "base_path": "/apps/inventory",
         "version": "v1"
       },
       "consumes_core_api": true
@@ -92,27 +93,27 @@
       "nav_entries": [
         {
           "label": "Přehled",
-          "path": "/app/app_inventory",
+          "path": "/app/inventory",
           "required_privileges": ["inventory.read"]
         },
         {
           "label": "Položky",
-          "path": "/app/app_inventory/items",
+          "path": "/app/inventory/items",
           "required_privileges": ["inventory.read"]
         },
         {
           "label": "Lokace",
-          "path": "/app/app_inventory/locations",
+          "path": "/app/inventory/locations",
           "required_privileges": ["inventory.read"]
         },
         {
           "label": "Šablony",
-          "path": "/app/app_inventory/templates",
+          "path": "/app/inventory/templates",
           "required_privileges": ["inventory.read"]
         },
         {
           "label": "Typy atributů",
-          "path": "/app/app_inventory/attributes",
+          "path": "/app/inventory/attributes",
           "required_privileges": ["inventory.read"]
         }
       ]
