@@ -17,6 +17,24 @@ await app.register(cors, { origin: true });
 
 app.get("/health", async () => ({ status: "ok" }));
 
+async function readManifestJson() {
+  const manifestPath = path.resolve(process.cwd(), "manifest", "app-manifest.json");
+  const raw = await readFile(manifestPath, "utf-8");
+  return JSON.parse(raw) as Record<string, unknown>;
+}
+
+app.get("/.well-known/hc-app-manifest.json", async (_request, reply) => {
+  const manifest = await readManifestJson();
+  reply.header("content-type", "application/json; charset=utf-8");
+  return reply.send(manifest);
+});
+
+app.get("/manifest.json", async (_request, reply) => {
+  const manifest = await readManifestJson();
+  reply.header("content-type", "application/json; charset=utf-8");
+  return reply.send(manifest);
+});
+
 app.get("/internal/ui/plugin.js", async (request, reply) => {
   const header = request.headers.authorization;
   if (!header?.startsWith("Bearer ")) {
