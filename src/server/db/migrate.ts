@@ -4,9 +4,11 @@ import path from "node:path";
 import { getPool } from "./pool.js";
 import { deriveAppSchemaName } from "./schema.js";
 
+const INVENTORY_APP_ID = "talpaversum/inventory";
+
 async function run() {
   const pool = getPool();
-  const schemaName = deriveAppSchemaName("com.talpaversum.inventory");
+  const schemaName = deriveAppSchemaName(INVENTORY_APP_ID);
   await pool.query(`create schema if not exists ${schemaName}`);
   await pool.query(`set search_path to ${schemaName}`);
   const migrationsDir = path.resolve(process.cwd(), "migrations");

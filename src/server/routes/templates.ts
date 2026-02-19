@@ -41,7 +41,7 @@ export async function registerTemplateRoutes(app: FastifyInstance) {
 
   app.get("/v1/templates/:templateId/fields", async (request, reply) => {
     const { tenantId } = requireAppContext(request);
-    const templateId = request.params.templateId as string;
+    const { templateId } = request.params as { templateId: string };
     const pool = getPool();
     const result = await pool.query(
       "select tf.attribute_type_id, tf.required from template_fields tf join templates t on t.id = tf.template_id where tf.template_id = $1 and t.tenant_id = $2 order by tf.sort_order",

@@ -1,5 +1,5 @@
 {
-  "app_id": "com.talpaversum.inventory",
+  "app_id": "talpaversum/inventory",
   "app_name": "Inventory",
   "version": "0.1.0",
   "vendor": {
@@ -43,6 +43,8 @@
     ]
   },
   "licensing": {
+    "required": true,
+    "issuer_url": "https://licensing.talpaversum.example",
     "enforced_by_app": true,
     "offline_supported": true,
     "modes": ["perpetual", "time_limited", "scale_limited"],
