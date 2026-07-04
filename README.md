@@ -52,6 +52,32 @@ Example `.env`:
 DATABASE_URL=postgres://hc_user:hc_password@localhost:5432/hc_core
 ```
 
+## Run with Docker Compose
+
+Inventory can run next to the local Hekatoncheiros Core compose stack. Start Core first,
+then run:
+
+```bash
+docker compose up -d --build
+```
+
+The app joins the `hekatoncheiros-core_default` Docker network and exposes:
+
+- app base URL inside the Core network: `http://inventory:4010`
+- host health URL: `http://localhost:4010/health`
+
+For local install through Core, add `http://inventory:4010` as a trusted origin,
+then fetch/install the manifest from that base URL.
+
+Compose intentionally reads `INVENTORY_DATABASE_URL` instead of the plain
+local-development `DATABASE_URL`, so a host `.env` can point to `localhost`
+without breaking the container. Installer token settings should match Core;
+set `INVENTORY_INSTALLER_TOKEN_SECRET` explicitly, or let Compose fall back to
+the shared `INSTALLER_TOKEN_SECRET` from `.env`.
+
+The container builds both the backend and `dist-plugin/plugin.js`, and the backend
+applies its app schema migrations during startup.
+
 ## Build UI plugin module
 
 ```bash

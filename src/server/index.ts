@@ -6,6 +6,7 @@ import path from "node:path";
 
 import { loadConfig } from "./config.js";
 import { verifyInstallationCompleteToken, verifyInstallerToken } from "./auth/installer-token.js";
+import { migrateDatabase } from "./db/migrate.js";
 import { registerLocationRoutes } from "./routes/locations.js";
 import { registerAttributeTypeRoutes } from "./routes/attribute-types.js";
 import { registerTemplateRoutes } from "./routes/templates.js";
@@ -15,6 +16,8 @@ const config = loadConfig();
 const app = Fastify({ logger: true });
 
 await app.register(cors, { origin: true });
+
+await migrateDatabase({ closePool: false });
 
 app.get("/health", async () => ({ status: "ok" }));
 

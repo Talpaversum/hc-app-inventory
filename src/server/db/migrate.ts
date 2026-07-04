@@ -1,12 +1,13 @@
 import { readFile } from "node:fs/promises";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 
 import { getPool } from "./pool.js";
 import { deriveAppSchemaName } from "./schema.js";
 
 const INVENTORY_APP_ID = "talpaversum/inventory";
 
-async function run() {
+export async function migrateDatabase(options: { closePool?: boolean } = {}) {
   const pool = getPool();
   const schemaName = deriveAppSchemaName(INVENTORY_APP_ID);
   await pool.query(`create schema if not exists ${schemaName}`);
@@ -18,13 +19,17 @@ async function run() {
   for (const filename of migrations) {
     const sql = await readFile(path.join(migrationsDir, filename), "utf-8");
     await pool.query(sql);
-    console.log(`[inventory] Applied migration ${filename}`);
+    console.info(`[inventory] Applied migration ${filename}`);
   }
 
-  await pool.end();
+  if (options.closePool ?? true) {
+    await pool.end();
+  }
 }
 
-run().catch((error) => {
-  console.error(error);
-  process.exit(1);
-});
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  migrateDatabase().catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
+}
