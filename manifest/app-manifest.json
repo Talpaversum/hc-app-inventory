@@ -44,7 +44,7 @@
   },
   "licensing": {
     "required": true,
-    "issuer_url": "https://licensing.talpaversum.example",
+    "issuer_url": "http://host.docker.internal:4030",
     "enforced_by_app": true,
     "offline_supported": true,
     "modes": ["perpetual", "time_limited", "scale_limited"],
