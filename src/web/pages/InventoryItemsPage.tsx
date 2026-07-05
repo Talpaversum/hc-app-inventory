@@ -74,84 +74,118 @@ export function InventoryItemsPage({ api }: InventoryItemsPageProps) {
   );
 
   return (
-    <div className="inventory-grid">
-      <SectionHeader title="Items" subtitle="Inventory" />
+    <div className="inventory-page">
+      <SectionHeader
+        title="Položky"
+        subtitle="Inventory"
+        description="Evidence fyzických i logických objektů v tenant inventáři."
+        aside={`${items.length} položek`}
+      />
 
-      <div className="surface">
-        <div className="inventory-grid two">
-          <input placeholder="Název položky" value={name} onChange={(event) => setName(event.target.value)} />
-          <input
-            placeholder="Inventární číslo"
-            value={inventoryNumber}
-            onChange={(event) => setInventoryNumber(event.target.value)}
-          />
+      <div className="inventory-card">
+        <div className="inventory-card-header">
           <div>
-            <label className="muted text-xs">Šablona</label>
-            <select
-              value={templateId ?? ""}
-              onChange={async (event) => {
-                const next = event.target.value || null;
-                setTemplateId(next);
-                if (!next) {
-                  setTemplateFields([]);
-                  return;
-                }
-                const response = await api.fetchTemplateFields(next);
-                setTemplateFields(response.items);
-              }}
-            >
-              <option value="">(bez šablony)</option>
-              {templates.map((tmpl) => (
-                <option key={tmpl.id} value={tmpl.id}>
-                  {tmpl.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className="muted text-xs">Lokace</label>
-            <select value={locationId ?? ""} onChange={(event) => setLocationId(event.target.value || null)}>
-              <option value="">(bez lokace)</option>
-              {locations.map((loc) => (
-                <option key={loc.id} value={loc.id}>
-                  {loc.name}
-                </option>
-              ))}
-            </select>
+            <div className="inventory-card-title">Nová položka</div>
+            <div className="inventory-card-note">Základní identifikace, umístění a atributy.</div>
           </div>
         </div>
-        <div className="inventory-grid two" style={{ marginTop: 12 }}>
-          {visibleTypes.map((type) => (
-            <input
-              key={type.id}
-              placeholder={type.label}
-              value={attributeValues[type.id] ?? ""}
-              onChange={(event) => setAttributeValues((prev) => ({ ...prev, [type.id]: event.target.value }))}
-            />
-          ))}
-        </div>
-        <div style={{ marginTop: 12 }}>
-          <button className="btn" onClick={handleCreate}>Vytvořit položku</button>
+        <div className="inventory-card-body">
+          <div className="inventory-grid two">
+            <div className="inventory-field">
+              <label>Název</label>
+              <input placeholder="Projektor Epson" value={name} onChange={(event) => setName(event.target.value)} />
+            </div>
+            <div className="inventory-field">
+              <label>Inventární číslo</label>
+              <input
+                placeholder="INV-2026-001"
+                value={inventoryNumber}
+                onChange={(event) => setInventoryNumber(event.target.value)}
+              />
+            </div>
+            <div className="inventory-field">
+              <label>Šablona</label>
+              <select
+                value={templateId ?? ""}
+                onChange={async (event) => {
+                  const next = event.target.value || null;
+                  setTemplateId(next);
+                  if (!next) {
+                    setTemplateFields([]);
+                    return;
+                  }
+                  const response = await api.fetchTemplateFields(next);
+                  setTemplateFields(response.items);
+                }}
+              >
+                <option value="">Bez šablony</option>
+                {templates.map((tmpl) => (
+                  <option key={tmpl.id} value={tmpl.id}>
+                    {tmpl.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="inventory-field">
+              <label>Lokace</label>
+              <select value={locationId ?? ""} onChange={(event) => setLocationId(event.target.value || null)}>
+                <option value="">Bez lokace</option>
+                {locations.map((loc) => (
+                  <option key={loc.id} value={loc.id}>
+                    {loc.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {visibleTypes.length > 0 && (
+            <div className="inventory-grid two inventory-subsection">
+              {visibleTypes.map((type) => (
+                <div className="inventory-field" key={type.id}>
+                  <label>{type.label}</label>
+                  <input
+                    placeholder={type.data_type}
+                    value={attributeValues[type.id] ?? ""}
+                    onChange={(event) => setAttributeValues((prev) => ({ ...prev, [type.id]: event.target.value }))}
+                  />
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="inventory-form-actions">
+            <button className="btn" onClick={handleCreate}>Vytvořit položku</button>
+          </div>
         </div>
       </div>
 
-      <div className="surface">
-        <table className="inventory-table">
-          <thead>
-            <tr>
-              <th>Název</th>
-              <th>Inventární číslo</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map((item) => (
-              <tr key={item.id}>
-                <td>{item.name}</td>
-                <td className="muted">{item.inventory_number ?? "-"}</td>
+      <div className="inventory-card">
+        <div className="inventory-card-header">
+          <div>
+            <div className="inventory-card-title">Seznam položek</div>
+            <div className="inventory-card-note">Poslední záznamy v inventáři.</div>
+          </div>
+        </div>
+        <div className="inventory-table-wrap">
+          <table className="inventory-table">
+            <thead>
+              <tr>
+                <th>Název</th>
+                <th>Inventární číslo</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {items.map((item) => (
+                <tr key={item.id}>
+                  <td>{item.name}</td>
+                  <td className="muted">{item.inventory_number ?? "-"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {items.length === 0 && <div className="inventory-empty">Žádné položky.</div>}
+        </div>
       </div>
     </div>
   );

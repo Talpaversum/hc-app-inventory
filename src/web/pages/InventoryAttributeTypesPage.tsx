@@ -49,61 +49,92 @@ export function InventoryAttributeTypesPage({ api }: InventoryAttributeTypesPage
   };
 
   return (
-    <div className="inventory-grid">
-      <SectionHeader title="Attribute types" subtitle="Inventory" />
+    <div className="inventory-page">
+      <SectionHeader
+        title="Typy atributů"
+        subtitle="Inventory"
+        description="Datové typy, validace a unikátnost vlastních polí."
+        aside={`${types?.length ?? 0} typů`}
+      />
 
-      <div className="surface">
-        <div className="inventory-grid two">
-          <input placeholder="Key (např. chair_id)" value={key} onChange={(event) => setKey(event.target.value)} />
-          <input placeholder="Label (např. Chair ID)" value={label} onChange={(event) => setLabel(event.target.value)} />
+      <div className="inventory-card">
+        <div className="inventory-card-header">
           <div>
-            <label className="muted text-xs">Datový typ</label>
-            <select value={dataType} onChange={(event) => setDataType(event.target.value)}>
-              <option value="string">String</option>
-              <option value="number">Number</option>
-              <option value="date">Date</option>
-            </select>
+            <div className="inventory-card-title">Nový typ atributu</div>
+            <div className="inventory-card-note">Definice vlastního pole pro položky a šablony.</div>
           </div>
-          <div>
-            <label className="muted text-xs">Unique scope</label>
-            <select value={uniqueScope} onChange={(event) => setUniqueScope(event.target.value)}>
-              <option value="none">None</option>
-              <option value="tenant">Tenant</option>
-              <option value="location">Location</option>
-            </select>
+        </div>
+        <div className="inventory-card-body">
+          <div className="inventory-grid two">
+            <div className="inventory-field">
+              <label>Key</label>
+              <input placeholder="chair_id" value={key} onChange={(event) => setKey(event.target.value)} />
+            </div>
+            <div className="inventory-field">
+              <label>Label</label>
+              <input placeholder="Chair ID" value={label} onChange={(event) => setLabel(event.target.value)} />
+            </div>
+            <div className="inventory-field">
+              <label>Datový typ</label>
+              <select value={dataType} onChange={(event) => setDataType(event.target.value)}>
+                <option value="string">String</option>
+                <option value="number">Number</option>
+                <option value="date">Date</option>
+              </select>
+            </div>
+            <div className="inventory-field">
+              <label>Unique scope</label>
+              <select value={uniqueScope} onChange={(event) => setUniqueScope(event.target.value)}>
+                <option value="none">None</option>
+                <option value="tenant">Tenant</option>
+                <option value="location">Location</option>
+              </select>
+            </div>
+            <div className="inventory-field">
+              <label>Validation regex</label>
+              <input
+                placeholder="Volitelné"
+                value={regex}
+                onChange={(event) => setRegex(event.target.value)}
+              />
+            </div>
           </div>
-          <input
-            placeholder="Validation regex (volitelné)"
-            value={regex}
-            onChange={(event) => setRegex(event.target.value)}
-          />
-          <div>
+          <div className="inventory-form-actions">
             <button className="btn" onClick={handleCreate}>Vytvořit typ</button>
           </div>
         </div>
       </div>
 
-      <div className="surface">
-        <table className="inventory-table">
-          <thead>
-            <tr>
-              <th>Label</th>
-              <th>Key</th>
-              <th>Type</th>
-              <th>Unique</th>
-            </tr>
-          </thead>
-          <tbody>
-            {(types ?? []).map((item) => (
-              <tr key={item.id}>
-                <td>{item.label}</td>
-                <td className="muted">{item.key}</td>
-                <td className="muted">{item.data_type}</td>
-                <td className="muted">{item.unique_scope}</td>
+      <div className="inventory-card">
+        <div className="inventory-card-header">
+          <div>
+            <div className="inventory-card-title">Seznam typů</div>
+            <div className="inventory-card-note">Vestavěné i tenant atributy.</div>
+          </div>
+        </div>
+        <div className="inventory-table-wrap">
+          <table className="inventory-table">
+            <thead>
+              <tr>
+                <th>Label</th>
+                <th>Key</th>
+                <th>Type</th>
+                <th>Unique</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {(types ?? []).map((item) => (
+                <tr key={item.id}>
+                  <td>{item.label}</td>
+                  <td className="muted">{item.key}</td>
+                  <td><span className="inventory-chip">{item.data_type}</span></td>
+                  <td className="muted">{item.unique_scope}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {(types ?? []).length === 0 && <div className="inventory-empty">Žádné typy atributů.</div>}
+        </div>
       </div>
     </div>
   );

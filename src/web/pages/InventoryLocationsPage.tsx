@@ -54,69 +54,108 @@ export function InventoryLocationsPage({ api }: InventoryLocationsPageProps) {
   };
 
   return (
-    <div className="inventory-grid">
-      <SectionHeader title="Locations" subtitle="Inventory" />
+    <div className="inventory-page">
+      <SectionHeader
+        title="Lokace"
+        subtitle="Inventory"
+        description="Hierarchie umístění pro fyzické položky v tenant inventáři."
+        aside={`${locations?.length ?? 0} záznamů`}
+      />
 
-      <div className="surface">
-        <div className="inventory-grid two">
+      <div className="inventory-card">
+        <div className="inventory-card-header">
           <div>
-            <div className="text-sm font-medium">Nová lokace</div>
-            <div className="inventory-grid">
-              <input placeholder="Název" value={name} onChange={(event) => setName(event.target.value)} />
-              <div>
-                <label className="muted text-xs">Typ lokace</label>
-                <select value={kindKey} onChange={(event) => setKindKey(event.target.value)}>
-                  {(kinds ?? []).map((kind) => (
-                    <option key={kind.id} value={kind.key}>
-                      {kind.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="muted text-xs">Rodič</label>
-                <select value={parentId ?? ""} onChange={(event) => setParentId(event.target.value || null)}>
-                  <option value="">(bez rodiče)</option>
-                  {parentOptions.map((opt) => (
-                    <option key={opt.id} value={opt.id}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <button className="btn" onClick={handleCreateLocation}>Vytvořit lokaci</button>
+            <div className="inventory-card-title">Nová lokace</div>
+            <div className="inventory-card-note">Umístění může být navázané na rodičovskou lokaci.</div>
+          </div>
+        </div>
+        <div className="inventory-card-body">
+          <div className="inventory-grid two">
+            <div className="inventory-field">
+              <label>Název</label>
+              <input placeholder="Sklad A" value={name} onChange={(event) => setName(event.target.value)} />
+            </div>
+            <div className="inventory-field">
+              <label>Typ lokace</label>
+              <select value={kindKey} onChange={(event) => setKindKey(event.target.value)}>
+                {(kinds ?? []).map((kind) => (
+                  <option key={kind.id} value={kind.key}>
+                    {kind.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div className="inventory-field">
+              <label>Rodič</label>
+              <select value={parentId ?? ""} onChange={(event) => setParentId(event.target.value || null)}>
+                <option value="">Bez rodiče</option>
+                {parentOptions.map((opt) => (
+                  <option key={opt.id} value={opt.id}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
-          <div>
-            <div className="text-sm font-medium">Nový typ lokace</div>
-            <div className="inventory-grid">
-              <input placeholder="Key (např. aisle)" value={newKindKey} onChange={(event) => setNewKindKey(event.target.value)} />
-              <input placeholder="Label (např. Aisle)" value={newKindLabel} onChange={(event) => setNewKindLabel(event.target.value)} />
-              <button className="btn btn-secondary" onClick={handleCreateKind}>Vytvořit typ lokace</button>
-            </div>
+          <div className="inventory-form-actions">
+            <button className="btn" onClick={handleCreateLocation}>Vytvořit lokaci</button>
           </div>
         </div>
       </div>
 
-      <div className="surface">
-        <table className="inventory-table">
-          <thead>
-            <tr>
-              <th>Název</th>
-              <th>Typ</th>
-              <th>Parent</th>
-            </tr>
-          </thead>
-          <tbody>
-            {(locations ?? []).map((loc) => (
-              <tr key={loc.id}>
-                <td>{loc.name}</td>
-                <td className="muted">{loc.kind_label}</td>
-                <td className="muted">{locations?.find((parent) => parent.id === loc.parent_id)?.name ?? "-"}</td>
+      <div className="inventory-card">
+        <div className="inventory-card-header">
+          <div>
+            <div className="inventory-card-title">Typy lokací</div>
+            <div className="inventory-card-note">Vlastní klasifikace pro lokaci.</div>
+          </div>
+          <span className="inventory-pill">{kinds?.length ?? 0} typů</span>
+        </div>
+        <div className="inventory-card-body">
+          <div className="inventory-grid two">
+            <div className="inventory-field">
+              <label>Key</label>
+              <input placeholder="aisle" value={newKindKey} onChange={(event) => setNewKindKey(event.target.value)} />
+            </div>
+            <div className="inventory-field">
+              <label>Label</label>
+              <input placeholder="Aisle" value={newKindLabel} onChange={(event) => setNewKindLabel(event.target.value)} />
+            </div>
+          </div>
+          <div className="inventory-form-actions">
+            <button className="btn btn-secondary" onClick={handleCreateKind}>Vytvořit typ lokace</button>
+          </div>
+        </div>
+      </div>
+
+      <div className="inventory-card">
+        <div className="inventory-card-header">
+          <div>
+            <div className="inventory-card-title">Seznam lokací</div>
+            <div className="inventory-card-note">Aktuální strom umístění.</div>
+          </div>
+        </div>
+        <div className="inventory-table-wrap">
+          <table className="inventory-table">
+            <thead>
+              <tr>
+                <th>Název</th>
+                <th>Typ</th>
+                <th>Rodič</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {(locations ?? []).map((loc) => (
+                <tr key={loc.id}>
+                  <td>{loc.name}</td>
+                  <td><span className="inventory-chip">{loc.kind_label}</span></td>
+                  <td className="muted">{locations?.find((parent) => parent.id === loc.parent_id)?.name ?? "-"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          {(locations ?? []).length === 0 && <div className="inventory-empty">Žádné lokace.</div>}
+        </div>
       </div>
     </div>
   );

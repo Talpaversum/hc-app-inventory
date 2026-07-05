@@ -7,6 +7,7 @@ import { InventoryLocationsPage } from "./web/pages/InventoryLocationsPage";
 import { InventoryTemplatesPage } from "./web/pages/InventoryTemplatesPage";
 import { InventoryAttributeTypesPage } from "./web/pages/InventoryAttributeTypesPage";
 import { createInventoryApi, type InventoryApi } from "./web/api/inventory-api";
+import inventoryStyles from "./web/styles/tokens.css?inline";
 
 export type AppContext = {
   api: {
@@ -32,7 +33,19 @@ export type InventoryPlugin = {
   nav_entries: PluginNavEntry[];
 };
 
+function ensureInventoryStyles() {
+  if (typeof document === "undefined" || document.getElementById("hc-app-inventory-styles")) {
+    return;
+  }
+
+  const style = document.createElement("style");
+  style.id = "hc-app-inventory-styles";
+  style.textContent = inventoryStyles;
+  document.head.appendChild(style);
+}
+
 export function register(appContext: AppContext): InventoryPlugin {
+  ensureInventoryStyles();
   const api = createInventoryApi(appContext);
 
   const routes: PluginRoute[] = [
@@ -44,7 +57,12 @@ export function register(appContext: AppContext): InventoryPlugin {
   ];
 
   const withApi = (Component: ComponentType<{ api: InventoryApi }>): ComponentType<Record<string, never>> => {
-    return () => <Component api={api} /> as ReactElement;
+    return () =>
+      (
+        <div className="inventory-app">
+          <Component api={api} />
+        </div>
+      ) as ReactElement;
   };
 
   return {

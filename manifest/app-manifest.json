@@ -122,6 +122,51 @@
           "path": "/app/inventory/attributes",
           "required_privileges": ["inventory.read"]
         }
+      ],
+      "help_entries": [
+        {
+          "title": "Vytvořit šablonu inventární položky",
+          "summary": "Postup pro vytvoření opakovaně použitelné šablony s tenant scope a vlastními atributy.",
+          "outcome": "Nová šablona bude dostupná při vytváření inventárních položek.",
+          "category": "Inventory",
+          "steps": [
+            "Otevři Inventory / Typy atributů a připrav atributy, které chceš v šabloně používat.",
+            "Přejdi do Inventory / Šablony.",
+            "Vyplň název šablony a vyber tenant scope.",
+            "Klikni na plus u atributů a přidej pole, která má šablona obsahovat.",
+            "Označ povinná pole a šablonu ulož."
+          ],
+          "path": "/app/inventory/templates",
+          "required_privileges": ["inventory.read"]
+        },
+        {
+          "title": "Založit evidovanou položku",
+          "summary": "Postup pro přidání nové fyzické nebo logické položky do evidence inventáře.",
+          "outcome": "Položka bude uložená v tenant inventáři a bude dohledatelná v seznamu položek.",
+          "category": "Inventory",
+          "steps": [
+            "Otevři Inventory / Položky.",
+            "Vyplň název a inventární číslo.",
+            "Vyber šablonu, lokaci, vlastníka a správce, pokud jsou pro položku relevantní.",
+            "Zkontroluj údaje a položku ulož."
+          ],
+          "path": "/app/inventory/items",
+          "required_privileges": ["inventory.read"]
+        },
+        {
+          "title": "Připravit lokaci pro inventář",
+          "summary": "Postup pro vytvoření místa, ke kterému pak lze přiřazovat inventární položky.",
+          "outcome": "Lokace bude dostupná ve formulářích položek a v přehledu lokací.",
+          "category": "Inventory",
+          "steps": [
+            "Otevři Inventory / Lokace.",
+            "Zadej název lokace a volitelný kód.",
+            "Ulož lokaci.",
+            "Při vytváření nebo úpravě položky vyber tuto lokaci v poli Location."
+          ],
+          "path": "/app/inventory/locations",
+          "required_privileges": ["inventory.read"]
+        }
       ]
     }
   }
