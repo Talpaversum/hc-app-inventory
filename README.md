@@ -8,7 +8,6 @@
 
 Inventory application for the Hekatoncheiros platform.
 
-
 Backend + UI plugin module for `app_inventory`.
 
 ## UI plugin (execution model)
@@ -77,6 +76,45 @@ the shared `INSTALLER_TOKEN_SECRET` from `.env`.
 
 The container builds both the backend and `dist-plugin/plugin.js`, and the backend
 applies its app schema migrations during startup.
+
+## Runtime package for Core
+
+Core can build and start Inventory from an application catalog entry without restarting
+the Core and web containers. Create the package and expose it over HTTP for local testing:
+
+```bash
+npm run package:runtime
+npm run serve:runtime-package
+```
+
+The package and its checksum are written to `dist/runtime-package`. A Core container can
+reach the local package server at
+`http://host.docker.internal:4020/hc-app-inventory-runtime.tar.gz`. Add
+`http://host.docker.internal:4020` to Core's trusted app origins before using local HTTP.
+
+The same server exposes a ready-to-sync development catalog at
+`http://host.docker.internal:4020/.well-known/hc/app-catalog.json`. It includes the
+non-running app manifest, package URL, and generated checksums, so Core can discover
+Inventory before its runtime exists. Set `RUNTIME_PACKAGE_PUBLIC_BASE_URL` when building
+the package to generate URLs for a different package host.
+
+Use the checksum printed by `npm run package:runtime` in the catalog deployment metadata:
+
+```json
+{
+  "type": "compose",
+  "package_url": "http://host.docker.internal:4020/hc-app-inventory-runtime.tar.gz",
+  "package_sha256": "<SHA-256 FROM THE BUILD>",
+  "compose_file": "docker-compose.app.yml",
+  "service_name": "inventory",
+  "internal_base_url": "http://inventory:4010"
+}
+```
+
+The runtime Compose file deliberately publishes no host port. Inventory is reachable by
+Core through the shared `hekatoncheiros-core_default` network. Test package download first
+with install mode `stage_only` and `stage_package: true`; then enable
+`APP_RUNTIME_DOCKER_ENABLED` and use install mode `compose`.
 
 ## Build UI plugin module
 
