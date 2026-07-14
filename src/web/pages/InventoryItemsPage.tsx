@@ -76,27 +76,27 @@ export function InventoryItemsPage({ api }: InventoryItemsPageProps) {
   return (
     <div className="inventory-page">
       <SectionHeader
-        title="Položky"
+        title="Items"
         subtitle="Inventory"
-        description="Evidence fyzických i logických objektů v tenant inventáři."
-        aside={`${items.length} položek`}
+        description="Physical and logical objects in the tenant inventory."
+        aside={`${items.length} items`}
       />
 
       <div className="inventory-card">
         <div className="inventory-card-header">
           <div>
-            <div className="inventory-card-title">Nová položka</div>
-            <div className="inventory-card-note">Základní identifikace, umístění a atributy.</div>
+            <div className="inventory-card-title">New item</div>
+            <div className="inventory-card-note">Basic identification, location, and attributes.</div>
           </div>
         </div>
         <div className="inventory-card-body">
           <div className="inventory-grid two">
             <div className="inventory-field">
-              <label>Název</label>
-              <input placeholder="Projektor Epson" value={name} onChange={(event) => setName(event.target.value)} />
+              <label>Name</label>
+              <input placeholder="Epson projector" value={name} onChange={(event) => setName(event.target.value)} />
             </div>
             <div className="inventory-field">
-              <label>Inventární číslo</label>
+              <label>Inventory number</label>
               <input
                 placeholder="INV-2026-001"
                 value={inventoryNumber}
@@ -104,7 +104,7 @@ export function InventoryItemsPage({ api }: InventoryItemsPageProps) {
               />
             </div>
             <div className="inventory-field">
-              <label>Šablona</label>
+              <label>Template</label>
               <select
                 value={templateId ?? ""}
                 onChange={async (event) => {
@@ -118,7 +118,7 @@ export function InventoryItemsPage({ api }: InventoryItemsPageProps) {
                   setTemplateFields(response.items);
                 }}
               >
-                <option value="">Bez šablony</option>
+                <option value="">No template</option>
                 {templates.map((tmpl) => (
                   <option key={tmpl.id} value={tmpl.id}>
                     {tmpl.name}
@@ -127,9 +127,9 @@ export function InventoryItemsPage({ api }: InventoryItemsPageProps) {
               </select>
             </div>
             <div className="inventory-field">
-              <label>Lokace</label>
+              <label>Location</label>
               <select value={locationId ?? ""} onChange={(event) => setLocationId(event.target.value || null)}>
-                <option value="">Bez lokace</option>
+                <option value="">No location</option>
                 {locations.map((loc) => (
                   <option key={loc.id} value={loc.id}>
                     {loc.name}
@@ -155,7 +155,7 @@ export function InventoryItemsPage({ api }: InventoryItemsPageProps) {
           )}
 
           <div className="inventory-form-actions">
-            <button className="btn" onClick={handleCreate}>Vytvořit položku</button>
+            <button className="btn" onClick={handleCreate}>Create item</button>
           </div>
         </div>
       </div>
@@ -163,16 +163,16 @@ export function InventoryItemsPage({ api }: InventoryItemsPageProps) {
       <div className="inventory-card">
         <div className="inventory-card-header">
           <div>
-            <div className="inventory-card-title">Seznam položek</div>
-            <div className="inventory-card-note">Poslední záznamy v inventáři.</div>
+            <div className="inventory-card-title">Item list</div>
+            <div className="inventory-card-note">Latest inventory records.</div>
           </div>
         </div>
         <div className="inventory-table-wrap">
           <table className="inventory-table">
             <thead>
               <tr>
-                <th>Název</th>
-                <th>Inventární číslo</th>
+                <th>Name</th>
+                <th>Inventory number</th>
               </tr>
             </thead>
             <tbody>
@@ -184,7 +184,7 @@ export function InventoryItemsPage({ api }: InventoryItemsPageProps) {
               ))}
             </tbody>
           </table>
-          {items.length === 0 && <div className="inventory-empty">Žádné položky.</div>}
+          {items.length === 0 && <div className="inventory-empty">No items.</div>}
         </div>
       </div>
     </div>

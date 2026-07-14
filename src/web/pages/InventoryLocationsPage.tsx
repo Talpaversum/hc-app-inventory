@@ -56,27 +56,27 @@ export function InventoryLocationsPage({ api }: InventoryLocationsPageProps) {
   return (
     <div className="inventory-page">
       <SectionHeader
-        title="Lokace"
+        title="Locations"
         subtitle="Inventory"
-        description="Hierarchie umístění pro fyzické položky v tenant inventáři."
-        aside={`${locations?.length ?? 0} záznamů`}
+        description="Location hierarchy for physical items in the tenant inventory."
+        aside={`${locations?.length ?? 0} records`}
       />
 
       <div className="inventory-card">
         <div className="inventory-card-header">
           <div>
-            <div className="inventory-card-title">Nová lokace</div>
-            <div className="inventory-card-note">Umístění může být navázané na rodičovskou lokaci.</div>
+            <div className="inventory-card-title">New location</div>
+            <div className="inventory-card-note">A location can be assigned to a parent location.</div>
           </div>
         </div>
         <div className="inventory-card-body">
           <div className="inventory-grid two">
             <div className="inventory-field">
-              <label>Název</label>
-              <input placeholder="Sklad A" value={name} onChange={(event) => setName(event.target.value)} />
+              <label>Name</label>
+              <input placeholder="Warehouse A" value={name} onChange={(event) => setName(event.target.value)} />
             </div>
             <div className="inventory-field">
-              <label>Typ lokace</label>
+              <label>Location type</label>
               <select value={kindKey} onChange={(event) => setKindKey(event.target.value)}>
                 {(kinds ?? []).map((kind) => (
                   <option key={kind.id} value={kind.key}>
@@ -86,9 +86,9 @@ export function InventoryLocationsPage({ api }: InventoryLocationsPageProps) {
               </select>
             </div>
             <div className="inventory-field">
-              <label>Rodič</label>
+              <label>Parent</label>
               <select value={parentId ?? ""} onChange={(event) => setParentId(event.target.value || null)}>
-                <option value="">Bez rodiče</option>
+                <option value="">No parent</option>
                 {parentOptions.map((opt) => (
                   <option key={opt.id} value={opt.id}>
                     {opt.label}
@@ -98,7 +98,7 @@ export function InventoryLocationsPage({ api }: InventoryLocationsPageProps) {
             </div>
           </div>
           <div className="inventory-form-actions">
-            <button className="btn" onClick={handleCreateLocation}>Vytvořit lokaci</button>
+            <button className="btn" onClick={handleCreateLocation}>Create location</button>
           </div>
         </div>
       </div>
@@ -106,10 +106,10 @@ export function InventoryLocationsPage({ api }: InventoryLocationsPageProps) {
       <div className="inventory-card">
         <div className="inventory-card-header">
           <div>
-            <div className="inventory-card-title">Typy lokací</div>
-            <div className="inventory-card-note">Vlastní klasifikace pro lokaci.</div>
+            <div className="inventory-card-title">Location types</div>
+            <div className="inventory-card-note">Custom location classifications.</div>
           </div>
-          <span className="inventory-pill">{kinds?.length ?? 0} typů</span>
+          <span className="inventory-pill">{kinds?.length ?? 0} types</span>
         </div>
         <div className="inventory-card-body">
           <div className="inventory-grid two">
@@ -123,7 +123,7 @@ export function InventoryLocationsPage({ api }: InventoryLocationsPageProps) {
             </div>
           </div>
           <div className="inventory-form-actions">
-            <button className="btn btn-secondary" onClick={handleCreateKind}>Vytvořit typ lokace</button>
+            <button className="btn btn-secondary" onClick={handleCreateKind}>Create location type</button>
           </div>
         </div>
       </div>
@@ -131,17 +131,17 @@ export function InventoryLocationsPage({ api }: InventoryLocationsPageProps) {
       <div className="inventory-card">
         <div className="inventory-card-header">
           <div>
-            <div className="inventory-card-title">Seznam lokací</div>
-            <div className="inventory-card-note">Aktuální strom umístění.</div>
+            <div className="inventory-card-title">Location list</div>
+            <div className="inventory-card-note">Current location hierarchy.</div>
           </div>
         </div>
         <div className="inventory-table-wrap">
           <table className="inventory-table">
             <thead>
               <tr>
-                <th>Název</th>
-                <th>Typ</th>
-                <th>Rodič</th>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Parent</th>
               </tr>
             </thead>
             <tbody>
@@ -154,7 +154,7 @@ export function InventoryLocationsPage({ api }: InventoryLocationsPageProps) {
               ))}
             </tbody>
           </table>
-          {(locations ?? []).length === 0 && <div className="inventory-empty">Žádné lokace.</div>}
+          {(locations ?? []).length === 0 && <div className="inventory-empty">No locations.</div>}
         </div>
       </div>
     </div>

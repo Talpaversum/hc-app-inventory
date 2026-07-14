@@ -74,24 +74,24 @@ export function InventoryTemplatesPage({ api }: InventoryTemplatesPageProps) {
   return (
     <div className="inventory-page">
       <SectionHeader
-        title="Šablony"
+        title="Templates"
         subtitle="Inventory"
-        description="Sady atributů pro opakované typy inventárních položek."
-        aside={`${templates?.length ?? 0} šablon`}
+        description="Reusable attribute sets for inventory item types."
+        aside={`${templates?.length ?? 0} templates`}
       />
 
       <div className="inventory-card">
         <div className="inventory-card-header">
           <div>
-            <div className="inventory-card-title">Nová šablona</div>
-            <div className="inventory-card-note">Výběr polí a povinných atributů.</div>
+            <div className="inventory-card-title">New template</div>
+            <div className="inventory-card-note">Select fields and required attributes.</div>
           </div>
         </div>
         <div className="inventory-card-body">
           <div className="inventory-grid two">
             <div className="inventory-field">
-              <label>Název</label>
-              <input placeholder="Kancelářská technika" value={name} onChange={(event) => setName(event.target.value)} />
+              <label>Name</label>
+              <input placeholder="Office equipment" value={name} onChange={(event) => setName(event.target.value)} />
             </div>
             <div className="inventory-field">
               <label>Scope</label>
@@ -117,10 +117,10 @@ export function InventoryTemplatesPage({ api }: InventoryTemplatesPageProps) {
           <div className="inventory-field-builder inventory-subsection">
             <div className="inventory-card-header compact">
               <div>
-                <div className="inventory-card-title">Atributy šablony</div>
-                <div className="inventory-card-note">Přidej pole v pořadí, ve kterém se mají vyplňovat.</div>
+                <div className="inventory-card-title">Template attributes</div>
+                <div className="inventory-card-note">Add fields in the order in which they should be completed.</div>
               </div>
-              <button className="btn btn-secondary" onClick={addField}>+ Přidat atribut</button>
+              <button className="btn btn-secondary" onClick={addField}>+ Add attribute</button>
             </div>
 
             <div className="inventory-field-list">
@@ -131,12 +131,12 @@ export function InventoryTemplatesPage({ api }: InventoryTemplatesPageProps) {
                   <div className="inventory-field-row" key={`${field.attribute_type_id}-${index}`}>
                     <div className="inventory-row-index">{index + 1}</div>
                     <div className="inventory-field">
-                      <label>Atribut</label>
+                      <label>Attribute</label>
                       <select
                         value={field.attribute_type_id}
                         onChange={(event) => updateField(index, { attribute_type_id: event.target.value })}
                       >
-                        <option value="">Vybrat atribut</option>
+                        <option value="">Select attribute</option>
                         {options.map((type) => (
                           <option key={type.id} value={type.id}>
                             {type.label} ({type.key})
@@ -152,18 +152,18 @@ export function InventoryTemplatesPage({ api }: InventoryTemplatesPageProps) {
                       />
                       Required
                     </label>
-                    <button className="btn btn-icon btn-danger" onClick={() => removeField(index)} aria-label="Odebrat atribut">
+                    <button className="btn btn-icon btn-danger" onClick={() => removeField(index)} aria-label="Remove attribute">
                       ×
                     </button>
                   </div>
                 );
               })}
-              {fields.length === 0 && <div className="inventory-empty compact">Šablona zatím nemá žádné atributy.</div>}
+              {fields.length === 0 && <div className="inventory-empty compact">The template has no attributes yet.</div>}
             </div>
           </div>
 
           <div className="inventory-form-actions">
-            <button className="btn" onClick={handleCreate}>Vytvořit šablonu</button>
+            <button className="btn" onClick={handleCreate}>Create template</button>
           </div>
         </div>
       </div>
@@ -171,15 +171,15 @@ export function InventoryTemplatesPage({ api }: InventoryTemplatesPageProps) {
       <div className="inventory-card">
         <div className="inventory-card-header">
           <div>
-            <div className="inventory-card-title">Seznam šablon</div>
-            <div className="inventory-card-note">Tenant šablony pro položky.</div>
+            <div className="inventory-card-title">Template list</div>
+            <div className="inventory-card-note">Tenant templates for inventory items.</div>
           </div>
         </div>
         <div className="inventory-table-wrap">
           <table className="inventory-table">
             <thead>
               <tr>
-                <th>Název</th>
+                <th>Name</th>
                 <th>Scope</th>
                 <th>Locked</th>
               </tr>
@@ -189,12 +189,12 @@ export function InventoryTemplatesPage({ api }: InventoryTemplatesPageProps) {
                 <tr key={template.id}>
                   <td>{template.name}</td>
                   <td><span className="inventory-chip">{template.visibility_scope}</span></td>
-                  <td className="muted">{template.is_locked ? "Ano" : "Ne"}</td>
+                  <td className="muted">{template.is_locked ? "Yes" : "No"}</td>
                 </tr>
               ))}
             </tbody>
           </table>
-          {(templates ?? []).length === 0 && <div className="inventory-empty">Žádné šablony.</div>}
+          {(templates ?? []).length === 0 && <div className="inventory-empty">No templates.</div>}
         </div>
       </div>
     </div>

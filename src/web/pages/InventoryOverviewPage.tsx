@@ -48,32 +48,32 @@ export function InventoryOverviewPage({ api }: InventoryOverviewPageProps) {
   return (
     <div className="inventory-page">
       <SectionHeader
-        title="Přehled"
+        title="Overview"
         subtitle="Inventory"
-        description="Souhrn tenant inventáře, jeho struktury a konfiguračních prvků."
+        description="Summary of the tenant inventory, its structure, and configuration."
         aside="MVP"
       />
 
       <div className="inventory-grid three">
         <div className="inventory-stat">
-          <div className="inventory-stat-label">Položky</div>
+          <div className="inventory-stat-label">Items</div>
           <div className="inventory-stat-value">{stats?.items ?? "-"}</div>
-          <div className="inventory-stat-detail">Evidované objekty</div>
+          <div className="inventory-stat-detail">Tracked objects</div>
         </div>
         <div className="inventory-stat">
-          <div className="inventory-stat-label">Lokace</div>
+          <div className="inventory-stat-label">Locations</div>
           <div className="inventory-stat-value">{stats?.locations ?? "-"}</div>
-          <div className="inventory-stat-detail">Místnosti, budovy a další umístění</div>
+          <div className="inventory-stat-detail">Rooms, buildings, and other locations</div>
         </div>
         <div className="inventory-stat">
-          <div className="inventory-stat-label">Šablony</div>
+          <div className="inventory-stat-label">Templates</div>
           <div className="inventory-stat-value">{stats?.templates ?? "-"}</div>
-          <div className="inventory-stat-detail">Předpisy atributů pro položky</div>
+          <div className="inventory-stat-detail">Attribute definitions for items</div>
         </div>
         <div className="inventory-stat">
-          <div className="inventory-stat-label">Typy atributů</div>
+          <div className="inventory-stat-label">Attribute types</div>
           <div className="inventory-stat-value">{stats?.attributes ?? "-"}</div>
-          <div className="inventory-stat-detail">Dostupná pole a validace</div>
+          <div className="inventory-stat-detail">Available fields and validation rules</div>
         </div>
       </div>
     </div>

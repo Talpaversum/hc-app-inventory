@@ -71,11 +71,11 @@ export function register(appContext: AppContext): InventoryPlugin {
       component: withApi(route.component),
     })),
     nav_entries: [
-      { label: "Přehled", path: "/app/inventory" },
-      { label: "Položky", path: "/app/inventory/items" },
-      { label: "Lokace", path: "/app/inventory/locations" },
-      { label: "Šablony", path: "/app/inventory/templates" },
-      { label: "Typy atributů", path: "/app/inventory/attributes" },
+      { label: "Overview", path: "/app/inventory" },
+      { label: "Items", path: "/app/inventory/items" },
+      { label: "Locations", path: "/app/inventory/locations" },
+      { label: "Templates", path: "/app/inventory/templates" },
+      { label: "Attribute types", path: "/app/inventory/attributes" },
     ],
   };
 }

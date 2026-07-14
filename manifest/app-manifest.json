@@ -98,71 +98,71 @@
       },
       "nav_entries": [
         {
-          "label": "Přehled",
+          "label": "Overview",
           "path": "/app/inventory",
           "required_privileges": ["inventory.read"]
         },
         {
-          "label": "Položky",
+          "label": "Items",
           "path": "/app/inventory/items",
           "required_privileges": ["inventory.read"]
         },
         {
-          "label": "Lokace",
+          "label": "Locations",
           "path": "/app/inventory/locations",
           "required_privileges": ["inventory.read"]
         },
         {
-          "label": "Šablony",
+          "label": "Templates",
           "path": "/app/inventory/templates",
           "required_privileges": ["inventory.read"]
         },
         {
-          "label": "Typy atributů",
+          "label": "Attribute types",
           "path": "/app/inventory/attributes",
           "required_privileges": ["inventory.read"]
         }
       ],
       "help_entries": [
         {
-          "title": "Vytvořit šablonu inventární položky",
-          "summary": "Postup pro vytvoření opakovaně použitelné šablony s tenant scope a vlastními atributy.",
-          "outcome": "Nová šablona bude dostupná při vytváření inventárních položek.",
+          "title": "Create an inventory item template",
+          "summary": "Create a reusable template with a tenant scope and custom attributes.",
+          "outcome": "The new template is available when creating inventory items.",
           "category": "Inventory",
           "steps": [
-            "Otevři Inventory / Typy atributů a připrav atributy, které chceš v šabloně používat.",
-            "Přejdi do Inventory / Šablony.",
-            "Vyplň název šablony a vyber tenant scope.",
-            "Klikni na plus u atributů a přidej pole, která má šablona obsahovat.",
-            "Označ povinná pole a šablonu ulož."
+            "Open Inventory / Attribute types and prepare the attributes used by the template.",
+            "Open Inventory / Templates.",
+            "Enter a template name and select its tenant scope.",
+            "Add the attributes that the template should contain.",
+            "Mark required fields and save the template."
           ],
           "path": "/app/inventory/templates",
           "required_privileges": ["inventory.read"]
         },
         {
-          "title": "Založit evidovanou položku",
-          "summary": "Postup pro přidání nové fyzické nebo logické položky do evidence inventáře.",
-          "outcome": "Položka bude uložená v tenant inventáři a bude dohledatelná v seznamu položek.",
+          "title": "Create an inventory item",
+          "summary": "Add a new physical or logical item to the inventory.",
+          "outcome": "The item is stored in the tenant inventory and appears in the item list.",
           "category": "Inventory",
           "steps": [
-            "Otevři Inventory / Položky.",
-            "Vyplň název a inventární číslo.",
-            "Vyber šablonu, lokaci, vlastníka a správce, pokud jsou pro položku relevantní.",
-            "Zkontroluj údaje a položku ulož."
+            "Open Inventory / Items.",
+            "Enter a name and inventory number.",
+            "Select a template, location, owner, and manager where applicable.",
+            "Review the data and save the item."
           ],
           "path": "/app/inventory/items",
           "required_privileges": ["inventory.read"]
         },
         {
-          "title": "Připravit lokaci pro inventář",
-          "summary": "Postup pro vytvoření místa, ke kterému pak lze přiřazovat inventární položky.",
-          "outcome": "Lokace bude dostupná ve formulářích položek a v přehledu lokací.",
+          "title": "Create an inventory location",
+          "summary": "Create a location that can be assigned to inventory items.",
+          "outcome": "The location is available in item forms and the location overview.",
           "category": "Inventory",
           "steps": [
-            "Otevři Inventory / Lokace.",
-            "Zadej název lokace a volitelný kód.",
-            "Ulož lokaci.",
-            "Při vytváření nebo úpravě položky vyber tuto lokaci v poli Location."
+            "Open Inventory / Locations.",
+            "Enter a location name and optional code.",
+            "Save the location.",
+            "Select this location in the Location field when creating or editing an item."
           ],
           "path": "/app/inventory/locations",
           "required_privileges": ["inventory.read"]

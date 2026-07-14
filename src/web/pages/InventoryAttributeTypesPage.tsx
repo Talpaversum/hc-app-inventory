@@ -51,17 +51,17 @@ export function InventoryAttributeTypesPage({ api }: InventoryAttributeTypesPage
   return (
     <div className="inventory-page">
       <SectionHeader
-        title="Typy atributů"
+        title="Attribute types"
         subtitle="Inventory"
-        description="Datové typy, validace a unikátnost vlastních polí."
-        aside={`${types?.length ?? 0} typů`}
+        description="Data types, validation, and uniqueness rules for custom fields."
+        aside={`${types?.length ?? 0} types`}
       />
 
       <div className="inventory-card">
         <div className="inventory-card-header">
           <div>
-            <div className="inventory-card-title">Nový typ atributu</div>
-            <div className="inventory-card-note">Definice vlastního pole pro položky a šablony.</div>
+            <div className="inventory-card-title">New attribute type</div>
+            <div className="inventory-card-note">Define a custom field for items and templates.</div>
           </div>
         </div>
         <div className="inventory-card-body">
@@ -75,7 +75,7 @@ export function InventoryAttributeTypesPage({ api }: InventoryAttributeTypesPage
               <input placeholder="Chair ID" value={label} onChange={(event) => setLabel(event.target.value)} />
             </div>
             <div className="inventory-field">
-              <label>Datový typ</label>
+              <label>Data type</label>
               <select value={dataType} onChange={(event) => setDataType(event.target.value)}>
                 <option value="string">String</option>
                 <option value="number">Number</option>
@@ -93,14 +93,14 @@ export function InventoryAttributeTypesPage({ api }: InventoryAttributeTypesPage
             <div className="inventory-field">
               <label>Validation regex</label>
               <input
-                placeholder="Volitelné"
+                placeholder="Optional"
                 value={regex}
                 onChange={(event) => setRegex(event.target.value)}
               />
             </div>
           </div>
           <div className="inventory-form-actions">
-            <button className="btn" onClick={handleCreate}>Vytvořit typ</button>
+            <button className="btn" onClick={handleCreate}>Create type</button>
           </div>
         </div>
       </div>
@@ -108,8 +108,8 @@ export function InventoryAttributeTypesPage({ api }: InventoryAttributeTypesPage
       <div className="inventory-card">
         <div className="inventory-card-header">
           <div>
-            <div className="inventory-card-title">Seznam typů</div>
-            <div className="inventory-card-note">Vestavěné i tenant atributy.</div>
+            <div className="inventory-card-title">Attribute type list</div>
+            <div className="inventory-card-note">Built-in and tenant-defined attributes.</div>
           </div>
         </div>
         <div className="inventory-table-wrap">
@@ -133,7 +133,7 @@ export function InventoryAttributeTypesPage({ api }: InventoryAttributeTypesPage
               ))}
             </tbody>
           </table>
-          {(types ?? []).length === 0 && <div className="inventory-empty">Žádné typy atributů.</div>}
+          {(types ?? []).length === 0 && <div className="inventory-empty">No attribute types.</div>}
         </div>
       </div>
     </div>
