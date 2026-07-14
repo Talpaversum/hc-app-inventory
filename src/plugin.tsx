@@ -14,8 +14,22 @@ export type AppContext = {
     request<T>(path: string, init?: RequestInit): Promise<T>;
   };
   privileges: string[];
+  localization?: {
+    requested_locale: string;
+    locale: string;
+    fallback_locale: "en";
+  };
   // TODO: add tenant/user/license context provided by core
 };
+
+const navTranslations = {
+  en: ["Overview", "Items", "Locations", "Templates", "Attribute types"],
+  cs: ["Přehled", "Položky", "Umístění", "Šablony", "Typy atributů"],
+  sk: ["Prehľad", "Položky", "Umiestnenia", "Šablóny", "Typy atribútov"],
+  de: ["Übersicht", "Artikel", "Standorte", "Vorlagen", "Attributtypen"],
+  fr: ["Aperçu", "Articles", "Emplacements", "Modèles", "Types d’attributs"],
+  es: ["Resumen", "Artículos", "Ubicaciones", "Plantillas", "Tipos de atributo"],
+} as const;
 
 export type PluginRoute = {
   path: string;
@@ -47,6 +61,8 @@ function ensureInventoryStyles() {
 export function register(appContext: AppContext): InventoryPlugin {
   ensureInventoryStyles();
   const api = createInventoryApi(appContext);
+  const locale = appContext.localization?.locale ?? "en";
+  const labels = navTranslations[locale as keyof typeof navTranslations] ?? navTranslations.en;
 
   const routes: PluginRoute[] = [
     { path: "", component: InventoryOverviewPage },
@@ -71,11 +87,11 @@ export function register(appContext: AppContext): InventoryPlugin {
       component: withApi(route.component),
     })),
     nav_entries: [
-      { label: "Overview", path: "/app/inventory" },
-      { label: "Items", path: "/app/inventory/items" },
-      { label: "Locations", path: "/app/inventory/locations" },
-      { label: "Templates", path: "/app/inventory/templates" },
-      { label: "Attribute types", path: "/app/inventory/attributes" },
+      { label: labels[0], path: "/app/inventory" },
+      { label: labels[1], path: "/app/inventory/items" },
+      { label: labels[2], path: "/app/inventory/locations" },
+      { label: labels[3], path: "/app/inventory/templates" },
+      { label: labels[4], path: "/app/inventory/attributes" },
     ],
   };
 }

@@ -68,6 +68,19 @@
       "attachments_gb_max": { "type": "size", "unit": "gb" }
     }
   },
+  "localization": {
+    "contract_version": 1,
+    "default_locale": "en",
+    "supported_locales": ["en", "cs", "sk", "de", "fr", "es"],
+    "resources": [
+      { "locale": "en", "path": "locales/en.json", "format": "hc-flat-json-v1" },
+      { "locale": "cs", "path": "locales/cs.json", "format": "hc-flat-json-v1" },
+      { "locale": "sk", "path": "locales/sk.json", "format": "hc-flat-json-v1" },
+      { "locale": "de", "path": "locales/de.json", "format": "hc-flat-json-v1" },
+      { "locale": "fr", "path": "locales/fr.json", "format": "hc-flat-json-v1" },
+      { "locale": "es", "path": "locales/es.json", "format": "hc-flat-json-v1" }
+    ]
+  },
   "integration": {
     "slug": "inventory",
     "api": {
