@@ -128,7 +128,7 @@ app.get("/internal/ui/plugin.js", async (request, reply) => {
 await registerLocationRoutes(app);
 await registerAttributeTypeRoutes(app);
 await registerTemplateRoutes(app);
-await registerItemRoutes(app);
+await registerItemRoutes(app, config);
 
 app.listen({ port: config.PORT, host: "0.0.0.0" }).catch((err) => {
   app.log.error(err);
