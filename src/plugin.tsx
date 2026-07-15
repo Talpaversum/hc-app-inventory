@@ -1,4 +1,4 @@
-import type { ComponentType } from "react";
+import { useEffect, useState, type ComponentType } from "react";
 import type { ReactElement } from "react";
 
 import { InventoryOverviewPage } from "./web/pages/InventoryOverviewPage";
@@ -37,6 +37,23 @@ export type PluginNavEntry = {
 export type InventoryPlugin = {
   routes: PluginRoute[];
   nav_entries: PluginNavEntry[];
+  dashboard_widgets: InventoryDashboardWidget[];
+};
+
+type InventoryDashboardWidget = {
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  requiredPrivileges: string[];
+  supportedScopes: readonly ("user" | "tenant" | "platform")[];
+  defaultVisible: boolean;
+  defaultSize: "small" | "medium" | "wide";
+  supportedSizes: readonly ("small" | "medium" | "wide")[];
+  presentation: "kpi" | "summary" | "list";
+  defaultPosition: number;
+  defaultSettings: Record<string, unknown>;
+  component: ComponentType<{ settings: Record<string, unknown> }>;
 };
 
 function ensureInventoryStyles() {
@@ -55,6 +72,9 @@ export function register(appContext: AppContext): InventoryPlugin {
   const api = createInventoryApi(appContext);
   const locale = appContext.localization?.locale ?? "en";
   const labels = inventoryNavLabels(locale);
+  const widgetLabels = locale === "cs"
+    ? { title: "Položky inventáře", description: "Celkový počet evidovaných položek.", category: "Inventář", loading: "Načítání…", error: "Data inventáře nelze načíst." }
+    : { title: "Inventory items", description: "Total number of registered inventory items.", category: "Inventory", loading: "Loading…", error: "Inventory data could not be loaded." };
 
   const routes: PluginRoute[] = [
     { path: "", component: InventoryOverviewPage },
@@ -75,6 +95,17 @@ export function register(appContext: AppContext): InventoryPlugin {
       ) as ReactElement;
   };
 
+  const InventorySummaryWidget = () => {
+    const [count, setCount] = useState<number | null>(null);
+    const [failed, setFailed] = useState(false);
+    useEffect(() => {
+      let active = true;
+      void api.fetchItems().then((result) => { if (active) setCount(result.items.length); }).catch(() => { if (active) setFailed(true); });
+      return () => { active = false; };
+    }, []);
+    return <div className="inventory-app"><InventoryLocalizationProvider locale={locale}><div><div className="text-3xl font-semibold">{failed ? "—" : count ?? "…"}</div><p className="mt-2 text-sm text-hc-muted">{failed ? widgetLabels.error : count === null ? widgetLabels.loading : widgetLabels.description}</p></div></InventoryLocalizationProvider></div>;
+  };
+
   return {
     routes: routes.map((route) => ({
       path: route.path,
@@ -87,5 +118,20 @@ export function register(appContext: AppContext): InventoryPlugin {
       { label: labels[3], path: "/app/inventory/templates" },
       { label: labels[4], path: "/app/inventory/attributes" },
     ],
+    dashboard_widgets: [{
+      id: "com.talpaversum.inventory.item-summary",
+      title: widgetLabels.title,
+      description: widgetLabels.description,
+      category: widgetLabels.category,
+      requiredPrivileges: ["inventory.read"],
+      supportedScopes: ["tenant"],
+      defaultVisible: false,
+      defaultSize: "small",
+      supportedSizes: ["small", "medium"],
+      presentation: "kpi",
+      defaultPosition: 1000,
+      defaultSettings: {},
+      component: InventorySummaryWidget,
+    }],
   };
 }
