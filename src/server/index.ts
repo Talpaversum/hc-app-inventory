@@ -7,6 +7,7 @@ import path from "node:path";
 import { loadConfig } from "./config.js";
 import { verifyInstallationCompleteToken, verifyInstallerToken } from "./auth/installer-token.js";
 import { migrateDatabase } from "./db/migrate.js";
+import { getPool } from "./db/pool.js";
 import { registerLocationRoutes } from "./routes/locations.js";
 import { registerAttributeTypeRoutes } from "./routes/attribute-types.js";
 import { registerTemplateRoutes } from "./routes/templates.js";
@@ -19,7 +20,14 @@ await app.register(cors, { origin: true });
 
 await migrateDatabase({ closePool: false });
 
-app.get("/health", async () => ({ status: "ok" }));
+app.get("/health", async (_request, reply) => {
+  try {
+    await getPool().query("select 1");
+    return { status: "healthy", service: "hc-app-inventory", version: "0.1.0", timestamp: new Date().toISOString(), checks: { database: "healthy" } };
+  } catch {
+    return reply.code(503).send({ status: "degraded", service: "hc-app-inventory", version: "0.1.0", timestamp: new Date().toISOString(), checks: { database: "unhealthy" } });
+  }
+});
 
 async function readManifestJson() {
   const manifestPath = path.resolve(process.cwd(), "manifest", "app-manifest.json");

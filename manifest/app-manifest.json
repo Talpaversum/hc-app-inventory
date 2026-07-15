@@ -2,6 +2,7 @@
   "app_id": "talpaversum/inventory",
   "app_name": "Inventory",
   "version": "0.1.0",
+  "runtime": { "healthCheck": { "path": "/health", "timeoutSeconds": 3, "intervalSeconds": 15 } },
   "vendor": {
     "name": "Talpaversum",
     "website": "https://github.com/Talpaversum"
