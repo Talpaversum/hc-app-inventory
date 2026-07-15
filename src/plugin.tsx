@@ -8,6 +8,7 @@ import { InventoryTemplatesPage } from "./web/pages/InventoryTemplatesPage";
 import { InventoryAttributeTypesPage } from "./web/pages/InventoryAttributeTypesPage";
 import { createInventoryApi, type InventoryApi } from "./web/api/inventory-api";
 import inventoryStyles from "./web/styles/tokens.css?inline";
+import { InventoryLocalizationProvider, inventoryNavLabels } from "./web/localization";
 
 export type AppContext = {
   api: {
@@ -21,15 +22,6 @@ export type AppContext = {
   };
   // TODO: add tenant/user/license context provided by core
 };
-
-const navTranslations = {
-  en: ["Overview", "Items", "Locations", "Templates", "Attribute types"],
-  cs: ["Přehled", "Položky", "Umístění", "Šablony", "Typy atributů"],
-  sk: ["Prehľad", "Položky", "Umiestnenia", "Šablóny", "Typy atribútov"],
-  de: ["Übersicht", "Artikel", "Standorte", "Vorlagen", "Attributtypen"],
-  fr: ["Aperçu", "Articles", "Emplacements", "Modèles", "Types d’attributs"],
-  es: ["Resumen", "Artículos", "Ubicaciones", "Plantillas", "Tipos de atributo"],
-} as const;
 
 export type PluginRoute = {
   path: string;
@@ -62,7 +54,7 @@ export function register(appContext: AppContext): InventoryPlugin {
   ensureInventoryStyles();
   const api = createInventoryApi(appContext);
   const locale = appContext.localization?.locale ?? "en";
-  const labels = navTranslations[locale as keyof typeof navTranslations] ?? navTranslations.en;
+  const labels = inventoryNavLabels(locale);
 
   const routes: PluginRoute[] = [
     { path: "", component: InventoryOverviewPage },
@@ -76,7 +68,9 @@ export function register(appContext: AppContext): InventoryPlugin {
     return () =>
       (
         <div className="inventory-app">
-          <Component api={api} />
+          <InventoryLocalizationProvider locale={locale}>
+            <Component api={api} />
+          </InventoryLocalizationProvider>
         </div>
       ) as ReactElement;
   };

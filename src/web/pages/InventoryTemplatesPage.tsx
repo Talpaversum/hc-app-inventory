@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import type { InventoryApi } from "../api/inventory-api";
 import { SectionHeader } from "../components/SectionHeader";
+import { localizeBuiltin, useInventoryLocalization } from "../localization";
 
 type InventoryTemplatesPageProps = {
   api: InventoryApi;
@@ -13,6 +14,7 @@ type TemplateFieldDraft = {
 };
 
 export function InventoryTemplatesPage({ api }: InventoryTemplatesPageProps) {
+  const { t } = useInventoryLocalization();
   const [templates, setTemplates] = useState<Array<{
     id: string;
     name: string;
@@ -74,37 +76,37 @@ export function InventoryTemplatesPage({ api }: InventoryTemplatesPageProps) {
   return (
     <div className="inventory-page">
       <SectionHeader
-        title="Templates"
-        subtitle="Inventory"
-        description="Reusable attribute sets for inventory item types."
-        aside={`${templates?.length ?? 0} templates`}
+        title={t("templates")}
+        subtitle={t("inventory")}
+        description={t("templatesDescription")}
+        aside={t("templatesCount", { count: templates?.length ?? 0 })}
       />
 
       <div className="inventory-card">
         <div className="inventory-card-header">
           <div>
-            <div className="inventory-card-title">New template</div>
-            <div className="inventory-card-note">Select fields and required attributes.</div>
+            <div className="inventory-card-title">{t("newTemplate")}</div>
+            <div className="inventory-card-note">{t("newTemplateNote")}</div>
           </div>
         </div>
         <div className="inventory-card-body">
           <div className="inventory-grid two">
             <div className="inventory-field">
-              <label>Name</label>
-              <input placeholder="Office equipment" value={name} onChange={(event) => setName(event.target.value)} />
+              <label>{t("name")}</label>
+              <input placeholder={t("exampleTemplate")} value={name} onChange={(event) => setName(event.target.value)} />
             </div>
             <div className="inventory-field">
-              <label>Scope</label>
+              <label>{t("scope")}</label>
               <select value={visibilityScope} onChange={(event) => setVisibilityScope(event.target.value)}>
-                <option value="tenant">Tenant</option>
-                <option value="department">Department</option>
-                <option value="group">Group</option>
-                <option value="user">User</option>
+                <option value="tenant">{t("tenant")}</option>
+                <option value="department">{t("department")}</option>
+                <option value="group">{t("group")}</option>
+                <option value="user">{t("user")}</option>
               </select>
             </div>
             {visibilityScope !== "tenant" && (
               <div className="inventory-field">
-                <label>Scope reference</label>
+                <label>{t("scopeReference")}</label>
                 <input
                   placeholder={`${visibilityScope}_id`}
                   value={visibilityRefId}
@@ -117,10 +119,10 @@ export function InventoryTemplatesPage({ api }: InventoryTemplatesPageProps) {
           <div className="inventory-field-builder inventory-subsection">
             <div className="inventory-card-header compact">
               <div>
-                <div className="inventory-card-title">Template attributes</div>
-                <div className="inventory-card-note">Add fields in the order in which they should be completed.</div>
+                <div className="inventory-card-title">{t("templateAttributes")}</div>
+                <div className="inventory-card-note">{t("templateAttributesNote")}</div>
               </div>
-              <button className="btn btn-secondary" onClick={addField}>+ Add attribute</button>
+              <button className="btn btn-secondary" onClick={addField}>+ {t("addAttribute")}</button>
             </div>
 
             <div className="inventory-field-list">
@@ -131,15 +133,15 @@ export function InventoryTemplatesPage({ api }: InventoryTemplatesPageProps) {
                   <div className="inventory-field-row" key={`${field.attribute_type_id}-${index}`}>
                     <div className="inventory-row-index">{index + 1}</div>
                     <div className="inventory-field">
-                      <label>Attribute</label>
+                      <label>{t("attribute")}</label>
                       <select
                         value={field.attribute_type_id}
                         onChange={(event) => updateField(index, { attribute_type_id: event.target.value })}
                       >
-                        <option value="">Select attribute</option>
+                        <option value="">{t("selectAttribute")}</option>
                         {options.map((type) => (
                           <option key={type.id} value={type.id}>
-                            {type.label} ({type.key})
+                            {localizeBuiltin(type.key, type.label, t)} ({type.key})
                           </option>
                         ))}
                       </select>
@@ -150,20 +152,20 @@ export function InventoryTemplatesPage({ api }: InventoryTemplatesPageProps) {
                         checked={field.required}
                         onChange={(event) => updateField(index, { required: event.target.checked })}
                       />
-                      Required
+                      {t("required")}
                     </label>
-                    <button className="btn btn-icon btn-danger" onClick={() => removeField(index)} aria-label="Remove attribute">
+                    <button className="btn btn-icon btn-danger" onClick={() => removeField(index)} aria-label={t("removeAttribute")}>
                       ×
                     </button>
                   </div>
                 );
               })}
-              {fields.length === 0 && <div className="inventory-empty compact">The template has no attributes yet.</div>}
+              {fields.length === 0 && <div className="inventory-empty compact">{t("noTemplateAttributes")}</div>}
             </div>
           </div>
 
           <div className="inventory-form-actions">
-            <button className="btn" onClick={handleCreate}>Create template</button>
+            <button className="btn" onClick={handleCreate}>{t("createTemplate")}</button>
           </div>
         </div>
       </div>
@@ -171,30 +173,30 @@ export function InventoryTemplatesPage({ api }: InventoryTemplatesPageProps) {
       <div className="inventory-card">
         <div className="inventory-card-header">
           <div>
-            <div className="inventory-card-title">Template list</div>
-            <div className="inventory-card-note">Tenant templates for inventory items.</div>
+            <div className="inventory-card-title">{t("templateList")}</div>
+            <div className="inventory-card-note">{t("templateListNote")}</div>
           </div>
         </div>
         <div className="inventory-table-wrap">
           <table className="inventory-table">
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Scope</th>
-                <th>Locked</th>
+                <th>{t("name")}</th>
+                <th>{t("scope")}</th>
+                <th>{t("locked")}</th>
               </tr>
             </thead>
             <tbody>
               {(templates ?? []).map((template) => (
                 <tr key={template.id}>
-                  <td>{template.name}</td>
+                  <td>{template.name === "Default item" ? t("defaultItem") : template.name}</td>
                   <td><span className="inventory-chip">{template.visibility_scope}</span></td>
-                  <td className="muted">{template.is_locked ? "Yes" : "No"}</td>
+                  <td className="muted">{t(template.is_locked ? "yes" : "no")}</td>
                 </tr>
               ))}
             </tbody>
           </table>
-          {(templates ?? []).length === 0 && <div className="inventory-empty">No templates.</div>}
+          {(templates ?? []).length === 0 && <div className="inventory-empty">{t("noTemplates")}</div>}
         </div>
       </div>
     </div>

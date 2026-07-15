@@ -2,16 +2,18 @@ import { useEffect, useMemo, useState } from "react";
 
 import type { InventoryApi } from "../api/inventory-api";
 import { SectionHeader } from "../components/SectionHeader";
+import { localizeBuiltin, useInventoryLocalization } from "../localization";
 
 type InventoryItemsPageProps = {
   api: InventoryApi;
 };
 
 export function InventoryItemsPage({ api }: InventoryItemsPageProps) {
+  const { t } = useInventoryLocalization();
   const [items, setItems] = useState<Array<{ id: string; name: string; inventory_number: string | null }>>([]);
   const [templates, setTemplates] = useState<Array<{ id: string; name: string }>>([]);
   const [locations, setLocations] = useState<Array<{ id: string; name: string }>>([]);
-  const [types, setTypes] = useState<Array<{ id: string; label: string; data_type: string }>>([]);
+  const [types, setTypes] = useState<Array<{ id: string; key: string; label: string; data_type: string; is_builtin: boolean }>>([]);
   const [templateFields, setTemplateFields] = useState<Array<{ attribute_type_id: string; required: boolean }>>([]);
   const [name, setName] = useState("");
   const [inventoryNumber, setInventoryNumber] = useState("");
@@ -29,7 +31,7 @@ export function InventoryItemsPage({ api }: InventoryItemsPageProps) {
     setItems(itemRes.items);
     setTemplates(tmplRes.items.map((item) => ({ id: item.id, name: item.name })));
     setLocations(locRes.items.map((item) => ({ id: item.id, name: item.name })));
-    setTypes(typeRes.items.map((item) => ({ id: item.id, label: item.label, data_type: item.data_type })));
+    setTypes(typeRes.items.map((item) => ({ id: item.id, key: item.key, label: item.label, data_type: item.data_type, is_builtin: item.is_builtin })));
   };
 
   useEffect(() => {
@@ -76,27 +78,27 @@ export function InventoryItemsPage({ api }: InventoryItemsPageProps) {
   return (
     <div className="inventory-page">
       <SectionHeader
-        title="Items"
-        subtitle="Inventory"
-        description="Physical and logical objects in the tenant inventory."
-        aside={`${items.length} items`}
+        title={t("items")}
+        subtitle={t("inventory")}
+        description={t("itemsDescription")}
+        aside={t("itemsCount", { count: items.length })}
       />
 
       <div className="inventory-card">
         <div className="inventory-card-header">
           <div>
-            <div className="inventory-card-title">New item</div>
-            <div className="inventory-card-note">Basic identification, location, and attributes.</div>
+            <div className="inventory-card-title">{t("newItem")}</div>
+            <div className="inventory-card-note">{t("newItemNote")}</div>
           </div>
         </div>
         <div className="inventory-card-body">
           <div className="inventory-grid two">
             <div className="inventory-field">
-              <label>Name</label>
-              <input placeholder="Epson projector" value={name} onChange={(event) => setName(event.target.value)} />
+              <label>{t("name")}</label>
+              <input placeholder={t("exampleItem")} value={name} onChange={(event) => setName(event.target.value)} />
             </div>
             <div className="inventory-field">
-              <label>Inventory number</label>
+              <label>{t("inventoryNumber")}</label>
               <input
                 placeholder="INV-2026-001"
                 value={inventoryNumber}
@@ -104,7 +106,7 @@ export function InventoryItemsPage({ api }: InventoryItemsPageProps) {
               />
             </div>
             <div className="inventory-field">
-              <label>Template</label>
+              <label>{t("template")}</label>
               <select
                 value={templateId ?? ""}
                 onChange={async (event) => {
@@ -118,18 +120,18 @@ export function InventoryItemsPage({ api }: InventoryItemsPageProps) {
                   setTemplateFields(response.items);
                 }}
               >
-                <option value="">No template</option>
+                <option value="">{t("noTemplate")}</option>
                 {templates.map((tmpl) => (
                   <option key={tmpl.id} value={tmpl.id}>
-                    {tmpl.name}
+                    {tmpl.name === "Default item" ? t("defaultItem") : tmpl.name}
                   </option>
                 ))}
               </select>
             </div>
             <div className="inventory-field">
-              <label>Location</label>
+              <label>{t("location")}</label>
               <select value={locationId ?? ""} onChange={(event) => setLocationId(event.target.value || null)}>
-                <option value="">No location</option>
+                <option value="">{t("noLocation")}</option>
                 {locations.map((loc) => (
                   <option key={loc.id} value={loc.id}>
                     {loc.name}
@@ -143,7 +145,7 @@ export function InventoryItemsPage({ api }: InventoryItemsPageProps) {
             <div className="inventory-grid two inventory-subsection">
               {visibleTypes.map((type) => (
                 <div className="inventory-field" key={type.id}>
-                  <label>{type.label}</label>
+                  <label>{type.is_builtin ? localizeBuiltin(type.key, type.label, t) : type.label}</label>
                   <input
                     placeholder={type.data_type}
                     value={attributeValues[type.id] ?? ""}
@@ -155,7 +157,7 @@ export function InventoryItemsPage({ api }: InventoryItemsPageProps) {
           )}
 
           <div className="inventory-form-actions">
-            <button className="btn" onClick={handleCreate}>Create item</button>
+            <button className="btn" onClick={handleCreate}>{t("createItem")}</button>
           </div>
         </div>
       </div>
@@ -163,16 +165,16 @@ export function InventoryItemsPage({ api }: InventoryItemsPageProps) {
       <div className="inventory-card">
         <div className="inventory-card-header">
           <div>
-            <div className="inventory-card-title">Item list</div>
-            <div className="inventory-card-note">Latest inventory records.</div>
+            <div className="inventory-card-title">{t("itemList")}</div>
+            <div className="inventory-card-note">{t("itemListNote")}</div>
           </div>
         </div>
         <div className="inventory-table-wrap">
           <table className="inventory-table">
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Inventory number</th>
+                <th>{t("name")}</th>
+                <th>{t("inventoryNumber")}</th>
               </tr>
             </thead>
             <tbody>
@@ -184,7 +186,7 @@ export function InventoryItemsPage({ api }: InventoryItemsPageProps) {
               ))}
             </tbody>
           </table>
-          {items.length === 0 && <div className="inventory-empty">No items.</div>}
+          {items.length === 0 && <div className="inventory-empty">{t("noItems")}</div>}
         </div>
       </div>
     </div>

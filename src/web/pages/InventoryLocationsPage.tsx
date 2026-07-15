@@ -2,12 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 
 import type { InventoryApi } from "../api/inventory-api";
 import { SectionHeader } from "../components/SectionHeader";
+import { localizeBuiltin, useInventoryLocalization } from "../localization";
 
 type InventoryLocationsPageProps = {
   api: InventoryApi;
 };
 
 export function InventoryLocationsPage({ api }: InventoryLocationsPageProps) {
+  const { t } = useInventoryLocalization();
   const [locations, setLocations] = useState<Array<{
     id: string;
     parent_id: string | null;
@@ -23,8 +25,8 @@ export function InventoryLocationsPage({ api }: InventoryLocationsPageProps) {
   const [newKindLabel, setNewKindLabel] = useState("");
 
   const parentOptions = useMemo(
-    () => locations?.map((loc) => ({ id: loc.id, label: `${loc.kind_label}: ${loc.name}` })) ?? [],
-    [locations],
+    () => locations?.map((loc) => ({ id: loc.id, label: `${localizeBuiltin(loc.kind_key, loc.kind_label, t)}: ${loc.name}` })) ?? [],
+    [locations, t],
   );
 
   const load = async () => {
@@ -56,39 +58,39 @@ export function InventoryLocationsPage({ api }: InventoryLocationsPageProps) {
   return (
     <div className="inventory-page">
       <SectionHeader
-        title="Locations"
-        subtitle="Inventory"
-        description="Location hierarchy for physical items in the tenant inventory."
-        aside={`${locations?.length ?? 0} records`}
+        title={t("locations")}
+        subtitle={t("inventory")}
+        description={t("locationsDescription")}
+        aside={t("recordsCount", { count: locations?.length ?? 0 })}
       />
 
       <div className="inventory-card">
         <div className="inventory-card-header">
           <div>
-            <div className="inventory-card-title">New location</div>
-            <div className="inventory-card-note">A location can be assigned to a parent location.</div>
+            <div className="inventory-card-title">{t("newLocation")}</div>
+            <div className="inventory-card-note">{t("newLocationNote")}</div>
           </div>
         </div>
         <div className="inventory-card-body">
           <div className="inventory-grid two">
             <div className="inventory-field">
-              <label>Name</label>
-              <input placeholder="Warehouse A" value={name} onChange={(event) => setName(event.target.value)} />
+              <label>{t("name")}</label>
+              <input placeholder={t("exampleLocation")} value={name} onChange={(event) => setName(event.target.value)} />
             </div>
             <div className="inventory-field">
-              <label>Location type</label>
+              <label>{t("locationType")}</label>
               <select value={kindKey} onChange={(event) => setKindKey(event.target.value)}>
                 {(kinds ?? []).map((kind) => (
                   <option key={kind.id} value={kind.key}>
-                    {kind.label}
+                    {kind.is_builtin ? localizeBuiltin(kind.key, kind.label, t) : kind.label}
                   </option>
                 ))}
               </select>
             </div>
             <div className="inventory-field">
-              <label>Parent</label>
+              <label>{t("parent")}</label>
               <select value={parentId ?? ""} onChange={(event) => setParentId(event.target.value || null)}>
-                <option value="">No parent</option>
+                <option value="">{t("noParent")}</option>
                 {parentOptions.map((opt) => (
                   <option key={opt.id} value={opt.id}>
                     {opt.label}
@@ -98,7 +100,7 @@ export function InventoryLocationsPage({ api }: InventoryLocationsPageProps) {
             </div>
           </div>
           <div className="inventory-form-actions">
-            <button className="btn" onClick={handleCreateLocation}>Create location</button>
+            <button className="btn" onClick={handleCreateLocation}>{t("createLocation")}</button>
           </div>
         </div>
       </div>
@@ -106,24 +108,24 @@ export function InventoryLocationsPage({ api }: InventoryLocationsPageProps) {
       <div className="inventory-card">
         <div className="inventory-card-header">
           <div>
-            <div className="inventory-card-title">Location types</div>
-            <div className="inventory-card-note">Custom location classifications.</div>
+            <div className="inventory-card-title">{t("locationTypes")}</div>
+            <div className="inventory-card-note">{t("locationTypesNote")}</div>
           </div>
-          <span className="inventory-pill">{kinds?.length ?? 0} types</span>
+          <span className="inventory-pill">{t("typesCount", { count: kinds?.length ?? 0 })}</span>
         </div>
         <div className="inventory-card-body">
           <div className="inventory-grid two">
             <div className="inventory-field">
-              <label>Key</label>
+              <label>{t("key")}</label>
               <input placeholder="aisle" value={newKindKey} onChange={(event) => setNewKindKey(event.target.value)} />
             </div>
             <div className="inventory-field">
-              <label>Label</label>
-              <input placeholder="Aisle" value={newKindLabel} onChange={(event) => setNewKindLabel(event.target.value)} />
+              <label>{t("label")}</label>
+              <input placeholder={t("exampleKind")} value={newKindLabel} onChange={(event) => setNewKindLabel(event.target.value)} />
             </div>
           </div>
           <div className="inventory-form-actions">
-            <button className="btn btn-secondary" onClick={handleCreateKind}>Create location type</button>
+            <button className="btn btn-secondary" onClick={handleCreateKind}>{t("createLocationType")}</button>
           </div>
         </div>
       </div>
@@ -131,30 +133,30 @@ export function InventoryLocationsPage({ api }: InventoryLocationsPageProps) {
       <div className="inventory-card">
         <div className="inventory-card-header">
           <div>
-            <div className="inventory-card-title">Location list</div>
-            <div className="inventory-card-note">Current location hierarchy.</div>
+            <div className="inventory-card-title">{t("locationList")}</div>
+            <div className="inventory-card-note">{t("locationListNote")}</div>
           </div>
         </div>
         <div className="inventory-table-wrap">
           <table className="inventory-table">
             <thead>
               <tr>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Parent</th>
+                <th>{t("name")}</th>
+                <th>{t("type")}</th>
+                <th>{t("parent")}</th>
               </tr>
             </thead>
             <tbody>
               {(locations ?? []).map((loc) => (
                 <tr key={loc.id}>
                   <td>{loc.name}</td>
-                  <td><span className="inventory-chip">{loc.kind_label}</span></td>
+                  <td><span className="inventory-chip">{localizeBuiltin(loc.kind_key, loc.kind_label, t)}</span></td>
                   <td className="muted">{locations?.find((parent) => parent.id === loc.parent_id)?.name ?? "-"}</td>
                 </tr>
               ))}
             </tbody>
           </table>
-          {(locations ?? []).length === 0 && <div className="inventory-empty">No locations.</div>}
+          {(locations ?? []).length === 0 && <div className="inventory-empty">{t("noLocations")}</div>}
         </div>
       </div>
     </div>
